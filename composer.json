@@ -1,0 +1,31 @@
+{
+    "name": "netglue/expressive-prismic-defaults",
+    "description": "Opinionated defaults for setup of a Zend Expressive website backed by Prismic.io CMS",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "George Steel",
+            "email": "george@net-glue.co.uk"
+        }
+    ],
+    "require": {
+        "netglue/expressive-prismic": "dev-master"
+    },
+     "autoload": {
+        "psr-4": {
+            "ExpressivePrismic\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ExpressivePrismicTest\\": "test/ExpressivePrismicTest"
+        }
+    },
+    "repositories" : [
+        {
+            "type": "vcs",
+            "url": "git@bitbucket.org:netglue/expressive-prismic.git"
+        }
+    ]
+}
