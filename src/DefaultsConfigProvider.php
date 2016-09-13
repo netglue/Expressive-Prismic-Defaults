@@ -17,6 +17,15 @@ class DefaultsConfigProvider
                     Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
                 ],
             ],
+
+            'view_helpers' => [
+                'factories' => [
+                    Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
+                ],
+                'aliases' => [
+                    'prismicConfig' => Service\UserConfig::class,
+                ],
+            ],
         ];
     }
 

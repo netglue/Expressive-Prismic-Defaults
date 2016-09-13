@@ -22,7 +22,7 @@ class UserConfigFactory
 
         $api          = $container->get(Prismic\Api::class);
         $linkResolver = $container->get(Prismic\LinkResolver::class);
-        return new UserConfig($api, $bookmark, $linkResolver);
+        return new UserConfig($api, $options['user_config_bookmark'], $linkResolver);
     }
 
 }
