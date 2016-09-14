@@ -1,0 +1,90 @@
+<?php
+
+namespace ExpressivePrismic\Service;
+
+use ExpressivePrismic\Paginator\PaginatorFactoryInterface;
+
+use Prismic;
+
+class SearchService
+{
+
+    /**
+     * An array of document types to restrict the search to
+     * @var array
+     */
+    private $types = [];
+
+    /**
+     * @var Prismic\Api
+     */
+    private $api;
+
+    /**
+     * @var PaginatorFactoryInterface|null
+     */
+    private $pagerFactory;
+
+    /**
+     * @param Prismic\Api $api
+     * @param array $types Restrict the search to the given document types
+     * @param PaginatorFactoryInterface $pagerFactory an optional instance capable of creating a pager with a search form
+     */
+    public function __construct(Prismic\Api $api, array $types = [], PaginatorFactoryInterface $pagerFactory = null)
+    {
+        $this->api = $api;
+        $this->types = $types;
+        $this->pagerFactory = $pagerFactory;
+    }
+
+    /**
+     * Search the api using the given query
+     * @param string $query The full text search term
+     * @param int $page Page offset if no paginator is being used
+     * @param int $perPage Page size if no paginator is being used
+     * @return mixed Return a paginator if a pager factory has been supplied or a Prismic\Response if not
+     */
+    public function search(string $query, int $page = null, int $perPage = null)
+    {
+        /**
+         * Until my pull request is accepted, use the master ref
+         * instead of the proposed method $this->api->ref()
+         */
+        $ref = (string) $this->api->master();
+        $query = str_replace('"','\"', $query);
+
+        $predicates = [Predicates::fulltext("document", $query)];
+
+        if (count($this->types)) {
+            $predicates[] = Predicates::any("document.type", $this->types);
+        }
+
+        $form = $api->forms()->everything
+                ->ref($ref)
+                ->query($predicates);
+
+        /**
+         * The pager gets an unsubmitted form so that it can be used
+         * to control page size and offset before retrieving the results
+         */
+        if ($this->pagerFactory) {
+            return $this->pagerFactory->getPaginator($form);
+        }
+
+        /**
+         * If there is no pager, set the page size and offset on the form if
+         * provided
+         */
+
+        if ($page) {
+            $form = $form->page($page);
+        }
+
+        if ($perPage) {
+            $form = $form->pageSize($perPage);
+        }
+
+        return $form->submit();
+    }
+
+}

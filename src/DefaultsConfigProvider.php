@@ -48,7 +48,27 @@ class DefaultsConfigProvider
 
 
             'prismic' => [
+
+                /**
+                 * A bookmark that points to a document used for site-wide configuration
+                 */
                 'user_config_bookmark' => null,
+
+                /**
+                 * Search Service Settings
+                 */
+                'search' => [
+                    /**
+                     * Provide document types to restrict the search service to
+                     */
+                    'types' => [
+                        // 'article',
+                        // 'page',
+                        // 'case-study',
+                        // etc…
+                    ],
+
+                ],
 
                 /**
                  * Automatic but naive retrieval of various head meta tags and elements
