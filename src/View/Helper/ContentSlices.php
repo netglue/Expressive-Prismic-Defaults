@@ -81,7 +81,7 @@ class ContentSlices
         if(strpos($fragmentName, $type.'.') === false) {
             $fragmentName = sprintf('%s.%s', $type, $fragmentName);
         }
-        if ($zone = $document->get($fragName)) {
+        if ($zone = $document->get($fragmentName)) {
             if ($zone instanceof Prismic\Fragment\SliceZone) {
                 return $zone;
             }

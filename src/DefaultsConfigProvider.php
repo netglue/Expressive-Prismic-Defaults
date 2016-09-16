@@ -40,9 +40,11 @@ class DefaultsConfigProvider
             'view_helpers' => [
                 'factories' => [
                     Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
+                    View\Helper\ContentSlices::class => View\Helper\Factory\ContentSlicesFactory::class,
                 ],
                 'aliases' => [
                     'prismicConfig' => Service\UserConfig::class,
+                    'contentSlices' => View\Helper\ContentSlices::class,
                 ],
             ],
 
@@ -68,6 +70,13 @@ class DefaultsConfigProvider
                         // etc…
                     ],
 
+                ],
+
+                /**
+                 * Template map for the ContentSlices view helper
+                 */
+                'slice_templates' => [
+                    // 'sliceLabel' => 'templateName'
                 ],
 
                 /**

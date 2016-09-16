@@ -14,10 +14,13 @@ class ContentSlicesFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : ContentSlices
     {
-        $config = $container->get('config');
-
-        $renderer = $container->get(TemplateRendererInterface::class);
+        $config           = $container->get('config');
+        $templates        = isset($config['prismic']['slice_templates'])
+                            ? $config['prismic']['slice_templates']
+                            : [];
+        $renderer         = $container->get(TemplateRendererInterface::class);
         $documentRegistry = $container->get(CurrentDocument::class);
+
         return new ContentSlices($templates, $renderer, $documentRegistry);
     }
 
