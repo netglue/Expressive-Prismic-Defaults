@@ -41,10 +41,12 @@ class DefaultsConfigProvider
                 'factories' => [
                     Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
                     View\Helper\ContentSlices::class => View\Helper\Factory\ContentSlicesFactory::class,
+                    View\Helper\Finder::class => View\Helper\Factory\FinderFactory::class,
                 ],
                 'aliases' => [
                     'prismicConfig' => Service\UserConfig::class,
                     'contentSlices' => View\Helper\ContentSlices::class,
+                    'prismicFinder' => View\Helper\Finder::class,
                 ],
             ],
 
