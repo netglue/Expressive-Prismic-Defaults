@@ -1,4 +1,8 @@
-# Expressive Prismic Website Defaults 'Module'
+# WIP: Expressive Prismic Website Defaults 'Module'
+
+## Introduction
+
+This is a module/library for a Zend Expressive app or website to help working with [prismic.io](https://prismic.io)'s content management api/platform. It depends on the [Expressive Prismic](https://github.com/netglue/Expressive-Prismic) module which provides the basics like an api instance in your di container etc.
 
 Note: As this is in the same namespace as the main `ExpressivePrismic` module, care must be taken to avoid namespace clashes.
 
