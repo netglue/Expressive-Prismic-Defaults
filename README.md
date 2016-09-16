@@ -18,5 +18,31 @@ expect a group to iterate over.
 When iterating over the group, link fragments are considered the url, structured text is considered as the anchor and everything else, providing it's text is considered as element attributes.
 if the link fragment points to document of a specific type, matching the 'link-list' type, then iterate over that too as a nested list.
 
-### Slices
+## Content Slices View Helper Documentation
+
+Prismic.io provides a powerful and flexible way of creating website content called Slices. Slices are units of content with a predefined structure contained in something called a Slice Zone. [Read up about slices](https://prismic.io/docs/fields/slices#?lang=javascript) themselves on the Prismic.io website.
+
+You may have a slice for a header image, a call to action, a pricing table, etc.
+
+A Slice Zone can be retrieved from a document just like any other fragment, with `$document->get('my-type.fragment-name');` but iterating over each slice and rendering the HTML for these can be time consuming and repetitive if you have to do it in multiple view templates. This is what the `contentSlices()` view helper is for.
+
+To configure the view helper, all you need is a hash of slice types to template names under the key `['prismic']['slice_templates']` in your expressive configuration…
+
+    [
+        'prismic' => [
+            'slice_templates' => [
+                'my-slice-type' => 'my::template-name',
+            ],
+        ]
+    ]
+
+Within the view script/template for the document, assuming the document has been resolved during the current request, you can simply issue:
+
+    echo $this->contentSlices('fragmentName');
+
+The fragment name does not have to be fully qualified, i.e. you can use `my-type.body` or just `body`. This is helpful when you routinely use a slice zone as the main body of a document but use the same template to render multiple different types of document.
+
+You can also provide a second argument to the helper to render the slices from a specific document, for example:
+    
+    echo $this->contentSlices('body', $someOtherDocument);
 
