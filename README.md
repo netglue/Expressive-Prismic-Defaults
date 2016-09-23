@@ -32,21 +32,30 @@ A Slice Zone can be retrieved from a document just like any other fragment, with
 
 To configure the view helper, all you need is a hash of slice types to template names under the key `['prismic']['slice_templates']` in your expressive configuration…
 
-    [
-        'prismic' => [
-            'slice_templates' => [
-                'my-slice-type' => 'my::template-name',
-            ],
-        ]
+```php
+[
+    'prismic' => [
+        'slice_templates' => [
+            'my-slice-type' => 'my::template-name',
+        ],
     ]
+]
+```
 
 Within the view script/template for the document, assuming the document has been resolved during the current request, you can simply issue:
-
-    echo $this->contentSlices('fragmentName');
+```php
+echo $this->contentSlices('fragmentName');
+```
 
 The fragment name does not have to be fully qualified, i.e. you can use `my-type.body` or just `body`. This is helpful when you routinely use a slice zone as the main body of a document but use the same template to render multiple different types of document.
 
 You can also provide a second argument to the helper to render the slices from a specific document, for example:
-    
-    echo $this->contentSlices('body', $someOtherDocument);
+```php
+echo $this->contentSlices('body', $someOtherDocument);
+```
+
+### Content Slices Templates
+
+Templates are provided with two variables by the ContentSlices view helper: `$slice` and `$document`.
+The `slice` variable refers to the slice you'll want to template and the document is the entire prismic document provided as context.
 

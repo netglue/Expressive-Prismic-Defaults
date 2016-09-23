@@ -3,3 +3,4 @@ phpunit.xml
 /build/
 /vendor/
 /node_modules/
+/.idea/

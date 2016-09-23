@@ -3,10 +3,17 @@
 namespace ExpressivePrismic\View\Helper;
 
 use ExpressivePrismic\Service\CurrentDocument;
-use Zend\Expressive\Template\TemplateRendererInterface;
 use Prismic;
-use Zend\View\HelperPluginManager;
+use Zend\View\Helper\Partial;
 
+/**
+ * ContentSlices View Helper
+ *
+ * A view helper that iterates over a 'SliceZone' type fragment and renders a partial for each 'Slice'
+ * Slices are mapped to view templates during configuration.
+ *
+ * @package ExpressivePrismic\View\Helper
+ */
 class ContentSlices
 {
 
@@ -17,31 +24,28 @@ class ContentSlices
     private $templates = [];
 
     /**
-     * Renderer
-     * @var TemplateRendererInterface
-     */
-    private $renderer;
-
-    /**
      * Current Document Registry
      * @var CurrentDocument
      */
     private $documentRegistry;
 
     /**
-     * @var HelperPluginManager
+     * @var Partial
      */
-    private $helpers;
+    private $partial;
 
     /**
+     * ContentSlices constructor.
      *
+     * @param array           $templates
+     * @param CurrentDocument $documentRegistry
+     * @param Partial         $partial
      */
-    public function __construct(array $templates, TemplateRendererInterface $renderer, CurrentDocument $documentRegistry, HelperPluginManager $helpers)
+    public function __construct(array $templates, CurrentDocument $documentRegistry, Partial $partial)
     {
         $this->documentRegistry = $documentRegistry;
         $this->templates = $templates;
-        $this->renderer = $renderer;
-        $this->helpers = $helpers;
+        $this->partial = $partial;
     }
 
     /**
@@ -93,6 +97,8 @@ class ContentSlices
                 return $zone;
             }
         }
+
+        return null;
     }
 
     /**
@@ -105,14 +111,13 @@ class ContentSlices
      */
     private function sliceAsString(Prismic\Document $document, Prismic\Fragment\Slice $slice) : string
     {
-        $type = $slice->getSliceType();
+        $type = (string) $slice->getSliceType();
         if (isset($this->templates[$type])) {
             $model = [
                 'document' => $document,
                 'slice'    => $slice,
             ];
-            $partial = $this->helpers->get('partial');
-            return (string) $partial($this->templates[$type], $model);
+            return (string) ($this->partial)($this->templates[$type], $model);
         }
 
         return '';

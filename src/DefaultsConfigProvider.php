@@ -1,55 +1,34 @@
 <?php
-declare(strict_types=1);
+/**
+ * This file is part of the Expressive Prismic Defaults Package
+ * Copyright 2016 Net Glue Ltd (https://netglue.uk).
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
+
 namespace ExpressivePrismic;
 
+/**
+ * Module config provider
+ *
+ * @package ExpressivePrismic
+ */
 class DefaultsConfigProvider
 {
 
+    /**
+     * @return array
+     */
     public function __invoke() : array
     {
         return [
 
-            'dependencies' => [
-                'factories' => [
+            'dependencies' => $this->getDependencyConfig(),
 
-                    /**
-                     * Service that returns values stored in a single configuration document
-                     */
-                    Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
-
-                    /**
-                     * Service to aid automation of setting regular web page meta data retrieved from
-                     * Prismic document. Only much use with Zend View
-                     */
-                    Service\MetaDataAutomator::class                => Service\Factory\MetaDataAutomatorFactory::class,
-
-
-                    /**
-                     * Middleware that consumes the meta data automator service and uses it for the current document
-                     */
-                    Middleware\MetaDataAutomatorMiddleware::class   => Middleware\Factory\MetaDataAutomatorMiddlewareFactory::class,
-
-                    /**
-                     * Middleware that sets the canonical URL along with og:url, twitter:url etc
-                     * using the link resolver and server url helpers
-                     */
-                    Middleware\SetCanonical::class                  => Middleware\Factory\SetCanonicalFactory::class,
-                ],
-            ],
-
-            'view_helpers' => [
-                'factories' => [
-                    Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
-                    View\Helper\ContentSlices::class => View\Helper\Factory\ContentSlicesFactory::class,
-                    View\Helper\Finder::class => View\Helper\Factory\FinderFactory::class,
-                ],
-                'aliases' => [
-                    'prismicConfig' => Service\UserConfig::class,
-                    'contentSlices' => View\Helper\ContentSlices::class,
-                    'prismicFinder' => View\Helper\Finder::class,
-                ],
-            ],
-
+            'view_helpers' => $this->getViewHelperConfig(),
 
             'prismic' => [
 
@@ -125,6 +104,61 @@ class DefaultsConfigProvider
                     ],
 
                 ],
+            ],
+        ];
+    }
+
+    /**
+     * Return config specific to Zend View Helpers
+     * @return array
+     */
+    public function getViewHelperConfig()
+    {
+        return [
+            'factories' => [
+                Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
+                View\Helper\ContentSlices::class => View\Helper\Factory\ContentSlicesFactory::class,
+                View\Helper\Finder::class => View\Helper\Factory\FinderFactory::class,
+            ],
+            'aliases' => [
+                'prismicConfig' => Service\UserConfig::class,
+                'contentSlices' => View\Helper\ContentSlices::class,
+                'prismicFinder' => View\Helper\Finder::class,
+            ],
+        ];
+    }
+
+    /**
+     * Return Dependency Config
+     * @return array
+     */
+    public function getDependencyConfig()
+    {
+        return [
+            'factories' => [
+
+                /**
+                 * Service that returns values stored in a single configuration document
+                 */
+                Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
+
+                /**
+                 * Service to aid automation of setting regular web page meta data retrieved from
+                 * Prismic document. Only much use with Zend View
+                 */
+                Service\MetaDataAutomator::class                => Service\Factory\MetaDataAutomatorFactory::class,
+
+
+                /**
+                 * Middleware that consumes the meta data automator service and uses it for the current document
+                 */
+                Middleware\MetaDataAutomatorMiddleware::class   => Middleware\Factory\MetaDataAutomatorMiddlewareFactory::class,
+
+                /**
+                 * Middleware that sets the canonical URL along with og:url, twitter:url etc
+                 * using the link resolver and server url helpers
+                 */
+                Middleware\SetCanonical::class                  => Middleware\Factory\SetCanonicalFactory::class,
             ],
         ];
     }
