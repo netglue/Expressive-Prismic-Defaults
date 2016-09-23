@@ -5,6 +5,7 @@ namespace ExpressivePrismic\View\Helper;
 use ExpressivePrismic\Service\CurrentDocument;
 use Zend\Expressive\Template\TemplateRendererInterface;
 use Prismic;
+use Zend\View\HelperPluginManager;
 
 class ContentSlices
 {
@@ -28,13 +29,19 @@ class ContentSlices
     private $documentRegistry;
 
     /**
+     * @var HelperPluginManager
+     */
+    private $helpers;
+
+    /**
      *
      */
-    public function __construct(array $templates, TemplateRendererInterface $renderer, CurrentDocument $documentRegistry)
+    public function __construct(array $templates, TemplateRendererInterface $renderer, CurrentDocument $documentRegistry, HelperPluginManager $helpers)
     {
         $this->documentRegistry = $documentRegistry;
         $this->templates = $templates;
         $this->renderer = $renderer;
+        $this->helpers = $helpers;
     }
 
     /**
@@ -104,8 +111,8 @@ class ContentSlices
                 'document' => $document,
                 'slice'    => $slice,
             ];
-
-            return (string) $this->renderer->render($this->templates[$type], $model);
+            $partial = $this->helpers->get('partial');
+            return (string) $partial($this->templates[$type], $model);
         }
 
         return '';

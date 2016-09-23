@@ -8,6 +8,7 @@ use Interop\Container\ContainerInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 use ExpressivePrismic\View\Helper\ContentSlices;
 use ExpressivePrismic\Service\CurrentDocument;
+use Zend\View\HelperPluginManager;
 
 class ContentSlicesFactory
 {
@@ -20,8 +21,9 @@ class ContentSlicesFactory
                             : [];
         $renderer         = $container->get(TemplateRendererInterface::class);
         $documentRegistry = $container->get(CurrentDocument::class);
+        $helpers = $container->get(HelperPluginManager::class);
 
-        return new ContentSlices($templates, $renderer, $documentRegistry);
+        return new ContentSlices($templates, $renderer, $documentRegistry, $helpers);
     }
 
 }
