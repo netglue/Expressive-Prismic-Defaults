@@ -34,6 +34,11 @@ class DefaultsConfigProvider
                      * using the link resolver and server url helpers
                      */
                     Middleware\SetCanonical::class                  => Middleware\Factory\SetCanonicalFactory::class,
+
+                    /**
+                     * Twig Extension Factories
+                     */
+                    View\Twig\UserConfigExtension::class   => View\Twig\Factory\UserConfigExtensionFactory::class,
                 ],
             ],
 
@@ -48,6 +53,10 @@ class DefaultsConfigProvider
                     'contentSlices' => View\Helper\ContentSlices::class,
                     'prismicFinder' => View\Helper\Finder::class,
                 ],
+            ],
+
+            'twig' => [
+                'extensions' => $this->getTwigExtensions(),
             ],
 
 
@@ -126,6 +135,13 @@ class DefaultsConfigProvider
 
                 ],
             ],
+        ];
+    }
+
+    public function getTwigExtensions()
+    {
+        return [
+            View\Twig\UserConfigExtension::class,
         ];
     }
 
