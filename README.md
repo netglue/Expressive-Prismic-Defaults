@@ -59,3 +59,10 @@ echo $this->contentSlices('body', $someOtherDocument);
 Templates are provided with two variables by the ContentSlices view helper: `$slice` and `$document`.
 The `slice` variable refers to the slice you'll want to template and the document is the entire prismic document provided as context.
 
+
+## LinkResolver View Helper Documentation
+
+Prismic relies on the presence of a `LinkResolver` in order to construct URLs from internal links between documents. A Link Resolver implementation is provided in [the main module](https://github.com/netglue/Expressive-Prismic) but you can override the implementation by configuring a service with the name `Prismic\LinkResolver`. Moving on, the Link resolver is frequently used so it makes sense to have a view helper around that can provide a link resolver on demand rather than passing a reference to one in all of our templates or partials. The Helper `ExpressivePrismic\View\Helper\LinkResolver` has a single method, `__invoke` that when called will return the link resolver instance, not the helper itself. If called with a non-null argument _(Expected to be an instance of `\Prismic\Fragment\Link\LinkInterface`)_, the helper will call `resolve()` directly on the link resolver in order to return either a string URL or null if the link or argument cannot be resolved to a URL.
+
+The helper is aliased as `linkResolver` so in view templates, you would call `$this->linkResolver()` to get the instance, or `$this->linkResolver($link)` to resolve the link to a URL.
+

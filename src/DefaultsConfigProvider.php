@@ -116,14 +116,16 @@ class DefaultsConfigProvider
     {
         return [
             'factories' => [
-                Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
+                Service\UserConfig::class        => Service\Factory\UserConfigFactory::class,
                 View\Helper\ContentSlices::class => View\Helper\Factory\ContentSlicesFactory::class,
-                View\Helper\Finder::class => View\Helper\Factory\FinderFactory::class,
+                View\Helper\Finder::class        => View\Helper\Factory\FinderFactory::class,
+                View\Helper\LinkResolver::class  => View\Helper\Factory\LinkResolverFactory::class,
             ],
             'aliases' => [
                 'prismicConfig' => Service\UserConfig::class,
                 'contentSlices' => View\Helper\ContentSlices::class,
                 'prismicFinder' => View\Helper\Finder::class,
+                'linkResolver'  => View\Helper\LinkResolver::class,
             ],
         ];
     }
