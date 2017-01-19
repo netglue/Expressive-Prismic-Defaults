@@ -43,12 +43,28 @@ class DefaultsConfigProvider
                 'search' => [
                     /**
                      * Provide document types to restrict the search service to
+                     * You should only list the document types that
+                     * a) you want to be found in search
+                     * b) are routable
                      */
                     'types' => [
                         // 'article',
                         // 'page',
                         // 'case-study',
                         // etc…
+                    ],
+                    /**
+                     * Configuration for the search middleware
+                     */
+                    'config' => [
+                        // The number of results per page
+                        'default_per_page' => 10,
+                        // The query parameter to look for
+                        'query_param' => 'q',
+                        // The parameter to look for the page number
+                        'page_param' => 'page',
+                        // The parameter to look for the results per page
+                        'per_page_param' => 'per_page',
                     ],
 
                 ],
@@ -145,6 +161,11 @@ class DefaultsConfigProvider
                 Service\UserConfig::class => Service\Factory\UserConfigFactory::class,
 
                 /**
+                 * A Service for performing keyword searches of repository documents
+                 */
+                Service\SearchService::class => Service\Factory\SearchServiceFactory::class,
+
+                /**
                  * Service to aid automation of setting regular web page meta data retrieved from
                  * Prismic document. Only much use with Zend View
                  */
@@ -161,6 +182,16 @@ class DefaultsConfigProvider
                  * using the link resolver and server url helpers
                  */
                 Middleware\SetCanonical::class                  => Middleware\Factory\SetCanonicalFactory::class,
+
+                /**
+                 * Middleware that processes search queries and adds the results as an attribute of the request
+                 */
+                Middleware\SearchMiddleware::class              => Middleware\Factory\SearchMiddlewareFactory::class,
+
+                /**
+                 * Middleware that renders a template for search results pages
+                 */
+                Middleware\SearchTemplateAction::class          => Middleware\Factory\SearchTemplateActionFactory::class,
             ],
         ];
     }

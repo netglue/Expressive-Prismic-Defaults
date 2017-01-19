@@ -53,13 +53,13 @@ class SearchService
         $ref = (string) $this->api->master();
         $query = str_replace('"','\"', $query);
 
-        $predicates = [Predicates::fulltext("document", $query)];
+        $predicates = [Prismic\Predicates::fulltext("document", $query)];
 
         if (count($this->types)) {
-            $predicates[] = Predicates::any("document.type", $this->types);
+            $predicates[] = Prismic\Predicates::any("document.type", $this->types);
         }
 
-        $form = $api->forms()->everything
+        $form = $this->api->forms()->everything
                 ->ref($ref)
                 ->query($predicates);
 
@@ -68,7 +68,10 @@ class SearchService
          * to control page size and offset before retrieving the results
          */
         if ($this->pagerFactory) {
-            return $this->pagerFactory->getPaginator($form);
+            $pager = $this->pagerFactory->getPaginator($form);
+            $pager->setItemCountPerPage($perPage);
+            $pager->setCurrentPageNumber($page);
+            return $pager;
         }
 
         /**
