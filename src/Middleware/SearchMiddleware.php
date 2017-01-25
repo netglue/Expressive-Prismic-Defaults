@@ -83,7 +83,7 @@ class SearchMiddleware
         $param = isset($this->config['query_param'])
                ? $this->config['query_param']
                : 'q';
-        $term = $request->getAttribute($param, null);
+        $term = $request->getAttribute($param, '');
         $params = $request->getQueryParams();
 
         $term = isset($params[$param])
