@@ -16,6 +16,12 @@ class SearchService
     private $types = [];
 
     /**
+     * An array of fragment -> value pairs to exclude in searches
+     * @var array
+     */
+    private $exclude = [];
+
+    /**
      * @var Prismic\Api
      */
     private $api;
@@ -30,10 +36,11 @@ class SearchService
      * @param array $types Restrict the search to the given document types
      * @param PaginatorFactoryInterface $pagerFactory an optional instance capable of creating a pager with a search form
      */
-    public function __construct(Prismic\Api $api, array $types = [], PaginatorFactoryInterface $pagerFactory = null)
+    public function __construct(Prismic\Api $api, array $types = [], array $exclude = [], PaginatorFactoryInterface $pagerFactory = null)
     {
         $this->api = $api;
         $this->types = $types;
+        $this->exclude = $exclude;
         $this->pagerFactory = $pagerFactory;
     }
 
@@ -57,6 +64,10 @@ class SearchService
 
         if (count($this->types)) {
             $predicates[] = Prismic\Predicates::any("document.type", $this->types);
+        }
+
+        foreach ($this->exclude as $field => $value) {
+            $predicates[] = Prismic\Predicates::not($field, $value);
         }
 
         $form = $this->api->forms()->everything

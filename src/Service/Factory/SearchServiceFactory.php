@@ -12,10 +12,11 @@ class SearchServiceFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchService
     {
-        $config = $container->get('config');
+        $config  = $container->get('config');
         $options = isset($config['prismic']) ? $config['prismic'] : [];
 
-        $types = $options['search']['types'] ? $options['search']['types'] : [];
+        $types   = $options['search']['types'] ? $options['search']['types'] : [];
+        $exclude = $options['search']['exclude'] ? $options['search']['exclude'] : [];
 
         $api = $container->get(Prismic\Api::class);
         $factory = null;
@@ -24,7 +25,7 @@ class SearchServiceFactory
             $factory = $container->get(PaginatorFactoryInterface::class);
         }
 
-        return new SearchService($api, $types, $factory);
+        return new SearchService($api, $types, $exclude, $factory);
     }
 
 }
