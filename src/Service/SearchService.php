@@ -53,11 +53,7 @@ class SearchService
      */
     public function search(string $query, int $page = null, int $perPage = null)
     {
-        /**
-         * Until my pull request is accepted, use the master ref
-         * instead of the proposed method $this->api->ref()
-         */
-        $ref = (string) $this->api->master();
+        $ref = (string) $this->api->ref();
         $query = str_replace('"','\"', $query);
 
         $predicates = [Prismic\Predicates::fulltext("document", $query)];
