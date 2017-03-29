@@ -4,6 +4,7 @@ namespace ExpressivePrismic\Service;
 
 use Prismic;
 use Zend\View\HelperPluginManager;
+use Zend\View\Helper;
 
 use ExpressivePrismic\View\MetaDataExtractor;
 use ExpressivePrismic\View\HeadTitleExtractor;
@@ -67,7 +68,7 @@ class MetaDataAutomator
         }
         $extrator = new HeadTitleExtractor($search);
         $data = $extrator->extract($document);
-        $headTitle = $this->helpers->get('headTitle');
+        $headTitle = $this->helpers->get(Helper\HeadTitle::class);
         if (isset($data['title'])) {
             $headTitle->set($data['title']);
         }
@@ -81,7 +82,7 @@ class MetaDataAutomator
         }
         $extrator = new TwitterCardExtractor($map);
         $data = $extrator->extract($document);
-        $headMeta = $this->helpers->get('headMeta');
+        $headMeta = $this->helpers->get(Helper\HeadMeta::class);
         foreach ($data as $name => $content) {
             $headMeta->setName($name, $content);
         }
@@ -97,11 +98,11 @@ class MetaDataAutomator
         $data = $extrator->extract($document);
 
         // HeadMeta won't allow <meta property> tags if the doctype is not Html 5 or rdfa.
-        $doctype = $this->helpers->get('doctype');
+        $doctype = $this->helpers->get(Helper\Doctype::class);
         $dt = $doctype->getDoctype();
         $doctype($doctype::HTML5);
 
-        $headMeta = $this->helpers->get('headMeta');
+        $headMeta = $this->helpers->get(Helper\HeadMeta::class);
         foreach ($data as $name => $content) {
             $headMeta->setProperty($name, $content);
         }
