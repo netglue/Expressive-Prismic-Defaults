@@ -10,16 +10,6 @@ class UserConfig
 {
 
     /**
-     * @var Prismic\Api
-     */
-    private $api;
-
-    /**
-     * @var string
-     */
-    private $bookmark;
-
-    /**
      * @var Prismic\LinkResolver
      */
     private $linkResolver;
@@ -32,10 +22,9 @@ class UserConfig
     /**
      * @param Prismic\Api $api
      */
-    public function __construct(Prismic\Api $api, string $bookmark, Prismic\LinkResolver $linkResolver)
+    public function __construct(Prismic\Document $document, Prismic\LinkResolver $linkResolver)
     {
-        $this->api          = $api;
-        $this->bookmark     = $bookmark;
+        $this->document     = $document;
         $this->linkResolver = $linkResolver;
     }
 
@@ -52,30 +41,11 @@ class UserConfig
     }
 
     /**
-     * Return the config document and load it if it has not yet been retrieved
+     * Return the config document
      * @return Prismic\Document
-     * @throws \RuntimeException if the document cannot be loaded
      */
     public function getDocument() : Prismic\Document
     {
-        if (!$this->document) {
-            $id       = $this->api->bookmark($this->bookmark);
-            $document = null;
-
-            if ($id) {
-                $document = $this->api->getByID($id);
-            }
-
-            if (!$document) {
-                throw new \RuntimeException(sprintf(
-                    'The bookmark "%s" does not resolve to valid configuration document in the Prismic Api',
-                    $this->bookmark
-                ));
-            }
-
-            $this->document = $document;
-        }
-
         return $this->document;
     }
 
@@ -104,8 +74,8 @@ class UserConfig
          * returns a string representation of the fragment
          */
         $frag = $this->getFragment($name);
-        if ($frag instanceof Fragment\LinkInterface) {
-            return $this->linkResolver->resolve($link);
+        if ($frag instanceof Fragment\Link\LinkInterface) {
+            return $this->linkResolver->resolve($frag);
         }
         if ($frag) {
             return $frag->asText();
@@ -141,8 +111,8 @@ class UserConfig
     public function getUrl(string $name)
     {
         $fragment = $this->getFragment($name);
-        if ($fragment instanceof Fragment\LinkInterface) {
-            return $this->linkResolver->resolve($link);
+        if ($fragment instanceof Fragment\Link\LinkInterface) {
+            return $this->linkResolver->resolve($fragment);
         }
 
         if (

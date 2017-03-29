@@ -20,9 +20,24 @@ class UserConfigFactory
             ));
         }
 
-        $api          = $container->get(Prismic\Api::class);
+        $api         = $container->get(Prismic\Api::class);
+        $documentId  = $api->bookmark($options['user_config_bookmark']);
+        if (!$documentId) {
+            throw new \RuntimeException(sprintf(
+                'An instance of %s can not be created because the prismic bookmark provided (%s) does not resolve to document identifier',
+                UserConfig::class,
+                $options['user_config_bookmark']
+            ));
+        }
+        $document = $api->getByID($documentId);
+        if (!$document) {
+            throw new \RuntimeException(sprintf(
+                'The bookmark "%s" does not resolve to valid configuration document in the Prismic Api',
+                $options['user_config_bookmark']
+            ));
+        }
         $linkResolver = $container->get(Prismic\LinkResolver::class);
-        return new UserConfig($api, $options['user_config_bookmark'], $linkResolver);
+        return new UserConfig($document, $linkResolver);
     }
 
 }

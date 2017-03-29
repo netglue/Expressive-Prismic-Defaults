@@ -1,0 +1,65 @@
+{
+    "id": "unique-document-id",
+    "uid": "unique-type-id",
+    "type": "article",
+    "href": "http://somewhere.com/api/documents/search?ref=SomeRef&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22unique-document-id%22%29+%5D%5D",
+    "tags": [],
+    "slugs": [
+        "some-slug"
+    ],
+    "linked_documents": [],
+    "data": {
+        "article": {
+            "plain_text_field": {
+                "type": "Text",
+                "value": "Plain Text Value"
+            },
+            "web_link_field": {
+                "type": "Link.web",
+                "value": {
+                    "url": "https://www.google.com"
+                }
+            },
+            "rich_text_field": {
+                "type" : "StructuredText",
+                "value" : [{
+                    "type" : "paragraph",
+                    "text" : "Some rich text",
+                    "spans" : []
+                }]
+            },
+            "image": {
+                "type": "Image",
+                "value": {
+                    "main": {
+                        "url": "https://example.com/img.jpg",
+                        "alt": "",
+                        "copyright": "",
+                        "dimensions": {
+                            "width": 860,
+                            "height": 640
+                        }
+                    },
+                    "views": {
+                        "small": {
+                            "url": "https://example.com/img-small.jpg",
+                            "alt": "",
+                            "copyright": "",
+                            "dimensions": {
+                                "width": 570,
+                                "height": 400
+                            }
+                        }
+                    }
+                }
+            },
+            "coords": {
+                "type": "GeoPoint",
+                "value": {
+                    "latitude": 50.0,
+                    "longitude": -3.0
+                }
+            }
+        }
+    }
+}
