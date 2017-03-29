@@ -70,6 +70,19 @@ class DefaultsConfigProvider
                 ],
 
                 /**
+                 * This extends the middleware pipe used during error handling
+                 * so that things like the meta title and social bits and bobs
+                 * are set on error pages too
+                 */
+                'error_handler' => [
+                    'middleware' => [
+                        Middleware\ExperimentInitiator::class,
+                        Middleware\InjectPreviewScript::class,
+                        Middleware\MetaDataAutomatorMiddleware::class,
+                    ],
+                ],
+
+                /**
                  * Template map for the ContentSlices view helper
                  */
                 'slice_templates' => [
