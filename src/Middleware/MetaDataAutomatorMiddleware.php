@@ -1,12 +1,14 @@
 <?php
 namespace ExpressivePrismic\Middleware;
 
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Prismic;
 use ExpressivePrismic\Service\MetaDataAutomator;
 
-class MetaDataAutomatorMiddleware
+class MetaDataAutomatorMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -19,16 +21,18 @@ class MetaDataAutomatorMiddleware
         $this->automator = $automator;
     }
 
-    public function __invoke(Request $request, Response $response, callable $next = null) : Response
+    /**
+     * @param  Request           $request
+     * @param  DelegateInterface $delegate
+     * @return Response
+     */
+    public function process(Request $request, DelegateInterface $delegate)
     {
         if ($document = $request->getAttribute(Prismic\Document::class)) {
             $this->automator->apply($document);
         }
 
-        if ($next) {
-            return $next($request, $response);
-        }
-        return $response;
+        return $delegate->process($request);
     }
 
 
