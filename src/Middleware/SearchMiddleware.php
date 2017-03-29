@@ -8,16 +8,13 @@ declare(strict_types=1);
 
 namespace ExpressivePrismic\Middleware;
 
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-
 use ExpressivePrismic\Service\SearchService;
 
-//use Zend\View\HelperPluginManager;
-//use Prismic;
-//use Zend\Expressive\Helper\ServerUrlHelper;
-
-class SearchMiddleware
+class SearchMiddleware implements MiddlewareInterface
 {
 
     /**
@@ -33,20 +30,25 @@ class SearchMiddleware
     /**
      * @param SearchService $searchService
      */
-    public function __construct(SearchService $searchService, array $config) //string $queryParam = 'q')
+    public function __construct(SearchService $searchService, array $config)
     {
         $this->searchService = $searchService;
         $this->config = $config;
     }
 
-
-    public function __invoke(Request $request, Response $response, callable $next)
+    /**
+     * @param  Request           $request
+     * @param  DelegateInterface $delegate
+     * @return Response
+     */
+    public function process(Request $request, DelegateInterface $delegate)
     {
         $term = $this->getQuery($request);
         if (!empty($term)) {
             $request = $this->injectResults($request, $term);
         }
-        return $next($request, $response);
+
+        return $delegate->process($request);
     }
 
     /**
@@ -68,9 +70,7 @@ class SearchMiddleware
             'results' => $pager,
         ];
 
-        $request = $request->withAttribute(self::class, $data);
-
-        return $request;
+        return $request->withAttribute(self::class, $data);
     }
 
     /**
@@ -80,15 +80,15 @@ class SearchMiddleware
      */
     private function getQuery(Request $request) : string
     {
-        $param = isset($this->config['query_param'])
-               ? $this->config['query_param']
-               : 'q';
-        $term = $request->getAttribute($param, '');
+        $param  = isset($this->config['query_param'])
+                ? $this->config['query_param']
+                : 'q';
+        $term   = $request->getAttribute($param, '');
         $params = $request->getQueryParams();
 
-        $term = isset($params[$param])
-              ? $params[$param]
-              : $term;
+        $term   = isset($params[$param])
+                ? $params[$param]
+                : $term;
 
         return trim($term);
     }
