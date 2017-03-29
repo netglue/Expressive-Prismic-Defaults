@@ -59,6 +59,63 @@
                     "latitude": 50.0,
                     "longitude": -3.0
                 }
+            },
+            "group_field" : {
+                "type" : "Group",
+                "value": [
+                    {
+                        "title": {
+                            "type": "StructuredText",
+                            "value": [
+                                {
+                                    "type": "heading1",
+                                    "text": "This is a title in a top level group",
+                                    "spans": []
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "slice_field" : {
+                "type": "SliceZone",
+                "value": [
+                    {
+                        "type": "Slice",
+                        "slice_type": "features",
+                        "value": {
+                            "type": "Group",
+                            "value": [
+                                {
+                                    "title": {
+                                        "type": "StructuredText",
+                                        "value": [
+                                            {
+                                                "type": "heading1",
+                                                "text": "This is a title in a group, in a slice",
+                                                "spans": []
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Slice",
+                        "slice_type": "heading",
+                        "value": {
+                            "type": "StructuredText",
+                            "value": [
+                                {
+                                    "type": "heading1",
+                                    "text": "This is a title as a slice value",
+                                    "spans": []
+                                }
+                            ]
+                        }
+                    }
+                ]
             }
         }
     }

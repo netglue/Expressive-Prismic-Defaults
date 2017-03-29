@@ -74,14 +74,13 @@ class MetaDataExtractor extends AbstractExtractor implements ExtractorInterface
      * @return array
      * @throws \InvalidArgumentException if type is not supplied and $document is not a Document instance
      */
-    public function extract(Prismic\WithFragments $document, string $type = null) : array
+    public function extract($document) : array
     {
-        $type = $this->getType($document, $type);
 
         $return = [];
 
         foreach($this->map as $metaName => $property) {
-            if ($value = $this->getText($document, $property, $type)) {
+            if ($value = $this->getText($document, $property)) {
                 $return[$metaName] = $value;
             }
         }

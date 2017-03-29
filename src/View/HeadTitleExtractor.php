@@ -35,17 +35,14 @@ class HeadTitleExtractor extends AbstractExtractor implements ExtractorInterface
     /**
      * To conform with the interface, this method returns an array with the single element ['title' => 'value']
      *
-     * @param Prismic\WithFragments $document You can provide a Prismic\GroupDoc, but if you do, $type is mandatory
-     * @param string $type Not required with a Prismic\Document instance
+     * @param Prismic\WithFragments $document You can provide a Prismic\Fragment\Group
      * @return array
-     * @throws \InvalidArgumentException if type is not supplied and $document is not a Document instance
      */
-    public function extract(Prismic\WithFragments $document, string $type = null) : array
+    public function extract($document) : array
     {
-        $type = $this->getType($document, $type);
-
         foreach($this->search as $property) {
-            if ($value = $this->getText($document, $property, $type)) {
+            $value = $this->getText($document, $property);
+            if ($value) {
                 return ['title' => $value];
             }
         }
