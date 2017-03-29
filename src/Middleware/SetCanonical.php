@@ -9,13 +9,16 @@ declare(strict_types=1);
 
 namespace ExpressivePrismic\Middleware;
 
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Zend\View\HelperPluginManager;
+use Zend\View\Helper\HeadLink;
 use Prismic;
 use Zend\Expressive\Helper\ServerUrlHelper;
 
-class SetCanonical
+class SetCanonical implements MiddlewareInterface
 {
 
     /**
@@ -40,12 +43,17 @@ class SetCanonical
         $this->serverUrl = $serverUrl;
     }
 
-    public function __invoke(Request $request, Response $response, callable $next = null) : Response
+    /**
+     * @param  Request           $request
+     * @param  DelegateInterface $delegate
+     * @return Response
+     */
+    public function process(Request $request, DelegateInterface $delegate)
     {
         if ($document = $request->getAttribute(Prismic\Document::class)) {
             $canonical = $this->serverUrl->generate($this->linkResolver->resolveDocument($document));
 
-            $helper = $this->helpers->get('headLink');
+            $helper = $this->helpers->get(HeadLink::class);
             $helper([
                 'rel' => 'canonical',
                 'href' => $canonical,
@@ -58,10 +66,7 @@ class SetCanonical
             $meta->setItemprop('url', $canonical);
         }
 
-        if ($next) {
-            return $next($request, $response);
-        }
-        return $response;
+        return $delegate->process($request);
     }
 
 }
