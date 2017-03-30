@@ -15,6 +15,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Zend\View\HelperPluginManager;
 use Zend\View\Helper\HeadLink;
+use Zend\View\Helper\HeadMeta;
+use Zend\View\Helper\Doctype;
 use Prismic;
 use Zend\Expressive\Helper\ServerUrlHelper;
 
@@ -58,9 +60,9 @@ class SetCanonical implements MiddlewareInterface
                 'rel' => 'canonical',
                 'href' => $canonical,
             ]);
-            $doctype = $this->helpers->get('doctype');
+            $doctype = $this->helpers->get(Doctype::class);
             $doctype($doctype::HTML5);
-            $meta = $this->helpers->get('headMeta');
+            $meta = $this->helpers->get(HeadMeta::class);
             $meta->setProperty('og:url', $canonical);
             $meta->setName('twitter:url', $canonical);
             $meta->setItemprop('url', $canonical);
