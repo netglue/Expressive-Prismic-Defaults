@@ -54,7 +54,7 @@ class MetaDataAutomator
         }
         $extrator = new MetaDataExtractor($map);
         $data = $extrator->extract($document);
-        $headMeta = $this->helpers->get('headMeta');
+        $headMeta = $this->helpers->get(Helper\HeadMeta::class);
         foreach ($data as $name => $content) {
             $headMeta->setName($name, $content);
         }
