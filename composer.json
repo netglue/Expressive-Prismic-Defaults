@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "netglue/expressive-prismic": "dev-master",
+        "netglue/expressive-prismic": "^1.0",
         "zendframework/zend-view": "^2.8"
     },
      "autoload": {
