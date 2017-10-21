@@ -105,11 +105,11 @@ class ContentSlices
      * Render a single slice
      *
      * @param  Prismic\Document $document
-     * @param  Prismic\Fragment\Slice $slice
+     * @param  Prismic\Fragment\SliceInterface $slice
      *
      * @return string
      */
-    private function sliceAsString(Prismic\Document $document, Prismic\Fragment\Slice $slice) : string
+    private function sliceAsString(Prismic\Document $document, Prismic\Fragment\SliceInterface $slice) : string
     {
         $type = (string) $slice->getSliceType();
         if (isset($this->templates[$type])) {
