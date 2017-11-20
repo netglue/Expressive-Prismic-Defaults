@@ -59,4 +59,19 @@ class Finder
         return $this->api->getByID($id);
     }
 
+    /**
+     * Locate a document with a 'bookmark'
+     *
+     * @param string $bookmark
+     * @return Prismic\Document|null
+     */
+    public function findByBookmark(string $bookmark)
+    {
+        $id = $this->api->bookmark($bookmark);
+        if (empty($id)) {
+            return null;
+        }
+        return $this->findById($id);
+    }
+
 }

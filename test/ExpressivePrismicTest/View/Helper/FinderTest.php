@@ -11,25 +11,51 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
     private $api;
 
-    private $helper;
-
     public function setUp()
     {
-        $this->document = Prismic\Document::parse(json_decode(file_get_contents(__DIR__ . '/../../../fixtures/document.json')));
-        $this->api = $this->createMock(Prismic\Api::class);
-        $this->api->method('getByID')
-                  ->willReturn($this->document);
-        $this->helper = new Helper($this->api);
+        $this->document = $this->prophesize(Prismic\Document::class);
+        $this->api = $this->prophesize(Prismic\Api::class);
+    }
+
+    protected function getHelper()
+    {
+        return new Helper($this->api->reveal());
     }
 
     public function testInvoke()
     {
-        $result = ($this->helper)();
-        $this->assertSame($this->helper, $result);
+        $helper = $this->getHelper();
+        $this->assertSame($helper, $helper->__invoke());
     }
 
-    public function testFindById()
+    public function testFindByIdIsSuccessful()
     {
-        $this->assertSame($this->document, $this->helper->findById('foo'));
+        $doc = $this->document->reveal();
+        $this->api->getByID('foo')->willReturn($doc);
+        $this->assertSame($doc, $this->getHelper()->findById('foo'));
     }
+
+    public function testFindByIdReturnsNull()
+    {
+        $this->api->getByID('foo')->willReturn(null);
+        $this->assertNull($this->getHelper()->findById('foo'));
+    }
+
+    public function testFindByBookmarkIsSuccessful()
+    {
+        $doc = $this->document->reveal();
+        $this->api->bookmark('name')->willReturn('SomeId');
+        $this->api->getByID('SomeId')->willReturn($doc);
+
+        $this->assertSame($doc, $this->getHelper()->findByBookmark('name'));
+    }
+
+    public function testFindByBookmarkReturnsNull()
+    {
+        $this->api->bookmark('name')->willReturn(null);
+        $this->api->getByID()->shouldNotBeCalled();
+
+        $this->assertNull($this->getHelper()->findByBookmark('name'));
+    }
+
 }
