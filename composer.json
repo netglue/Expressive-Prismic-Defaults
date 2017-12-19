@@ -41,5 +41,5 @@
         "zf": {
             "config-provider": "ExpressivePrismic\\DefaultsConfigProvider"
         }
-    },
+    }
 }
