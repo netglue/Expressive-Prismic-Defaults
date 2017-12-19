@@ -12,8 +12,9 @@
         }
     ],
     "require": {
-        "netglue/expressive-prismic": "^2.0",
-        "zendframework/zend-view": "^2.8"
+        "netglue/expressive-prismic": ">=2.0",
+        "zendframework/zend-view": "^2.8",
+        "http-interop/http-middleware": "^0.4.1"
     },
      "autoload": {
         "psr-4": {
@@ -35,5 +36,10 @@
         "phpunit/phpunit": "^5.5",
         "zendframework/zend-paginator": "^2.7",
         "zendframework/zend-expressive-zendviewrenderer": "^1.4"
-    }
+    },
+    "extra": {
+        "zf": {
+            "config-provider": "ExpressivePrismic\\DefaultsConfigProvider"
+        }
+    },
 }
